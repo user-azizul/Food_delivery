@@ -2,33 +2,42 @@ import React, { useState } from "react";
 import { assets } from "../../assets/frontend_assets/assets";
 
 import "./Navbar.css";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
+  const handleScroll = (id) => {
+    setMenu(id);
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
   return (
     <div className="navbar">
       <img src={assets.logo} alt="" className="logo" />
       <ul className="navbar-menu">
-        <li
+        <Link
+          to={"/"}
           onClick={() => setMenu("home")}
           className={menu === "home" ? "active" : ""}
         >
-          home
-        </li>
+          Home
+        </Link>
         <li
-          onClick={() => setMenu("menu")}
+          onClick={() => handleScroll("explore-menu")}
           className={menu === "menu" ? "active" : ""}
         >
           menu
         </li>
         <li
-          onClick={() => setMenu("mobile-app")}
+          onClick={() => handleScroll("mobile-app")}
           className={menu === "mobile-app" ? "active" : ""}
         >
           mobile-app
         </li>
         <li
-          onClick={() => setMenu("contact us")}
+          onClick={() => handleScroll("footer")}
           className={menu === "contact us" ? "active" : ""}
         >
           contact us

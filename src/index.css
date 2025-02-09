@@ -9,6 +9,9 @@ body {
   min-height: 100vh;
   font-family: "Outfit", serif;
 }
+html {
+  scroll-behavior: smooth;
+}
 a {
   text-decoration: none;
   color: inherit;
