@@ -4,7 +4,7 @@ import { assets } from "../../assets/frontend_assets/assets";
 import "./Navbar.css";
 import { Link } from "react-router";
 
-const Navbar = () => {
+const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const handleScroll = (id) => {
     setMenu(id);
@@ -49,7 +49,7 @@ const Navbar = () => {
           <img src={assets.basket_icon} alt="" />
           <div className="dot"></div>
         </div>
-        <button>Sign in</button>
+        <button onClick={() => setShowLogin(true)}>Sign in</button>
       </div>
     </div>
   );
