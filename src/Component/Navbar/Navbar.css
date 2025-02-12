@@ -37,7 +37,7 @@
   background: tomato;
   color: white;
 }
-.navbar-menu li {
+.navbar-menu #li {
   text-transform: capitalize;
   cursor: pointer;
 }

@@ -26,6 +26,19 @@ const StoreContextProvider = ({ children }) => {
       }
     });
   };
+  const totalCartAmout = () => {
+    let total = 0;
+    for (let key in cartItems) {
+      let quantity = cartItems[key];
+      const food = food_list.find((item) => item._id === key);
+      total += food.price * quantity;
+    }
+    return total;
+  };
+  const totalCartItems = () => {
+    return Object.values(cartItems).reduce((a, b) => a + b, 0);
+  };
+  console.log(totalCartItems());
   useEffect(() => {
     console.log(cartItems);
   }, [cartItems]);
@@ -34,7 +47,8 @@ const StoreContextProvider = ({ children }) => {
     food_list,
     cartItems,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    totalCartAmout
   };
 
   return (

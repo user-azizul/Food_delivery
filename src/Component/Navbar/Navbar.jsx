@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { assets } from "../../assets/frontend_assets/assets";
 
 import "./Navbar.css";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("home");
   const handleScroll = (id) => {
-    setMenu(id);
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -15,38 +13,48 @@ const Navbar = ({ setShowLogin }) => {
   };
   return (
     <div className="navbar">
-      <img src={assets.logo} alt="" className="logo" />
+      <Link to={"/"}>
+        <img src={assets.logo} alt="" className="logo" />
+      </Link>
       <ul className="navbar-menu">
-        <Link
+        <NavLink
           to={"/"}
           onClick={() => setMenu("home")}
-          className={menu === "home" ? "active" : ""}
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           Home
-        </Link>
-        <li
+        </NavLink>
+        <Link
+          id="li"
+          to="/"
           onClick={() => handleScroll("explore-menu")}
-          className={menu === "menu" ? "active" : ""}
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           menu
-        </li>
-        <li
+        </Link>
+        <Link
+          id="li"
+          to="/"
           onClick={() => handleScroll("mobile-app")}
-          className={menu === "mobile-app" ? "active" : ""}
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           mobile-app
-        </li>
-        <li
+        </Link>
+        <Link
+          id="li"
+          to="/"
           onClick={() => handleScroll("footer")}
-          className={menu === "contact us" ? "active" : ""}
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           contact us
-        </li>
+        </Link>
       </ul>
       <div className="navbar-right">
         <img src={assets.search_icon} alt="" />
         <div className="navbar-search-icon">
-          <img src={assets.basket_icon} alt="" />
+          <Link to="/cart">
+            <img src={assets.basket_icon} alt="" />{" "}
+          </Link>
           <div className="dot"></div>
         </div>
         <button onClick={() => setShowLogin(true)}>Sign in</button>
