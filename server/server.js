@@ -3,28 +3,29 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/food.route.js";
 
-// app config
-
+// App Config
 const app = express();
 const port = 4000;
 
-// middleware
+// Middleware
+app.use(cors());  // Allow all origins
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Test API
 app.get("/", (req, res) => {
-  res.send("Api working");
+  res.send("API working");
 });
-// Database connection
+
+// Database Connection
 connectDB();
 
-// api endpoints
+// Routes
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
-// listen
 
+// Start Server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

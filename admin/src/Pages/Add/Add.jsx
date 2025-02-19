@@ -30,10 +30,8 @@ function Add() {
       formData.append('category', data.category);
       formData.append('image', image);
   
-      const response = await axios.post(`http://localhost:4000/api/food/add`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await axios.post("http://localhost:5000/api/food/add", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
   
       if (response.data.success) {
