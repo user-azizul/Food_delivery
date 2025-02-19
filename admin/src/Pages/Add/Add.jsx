@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Add.css";
 import { assets } from "../../admin_assets/assets";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Add() {
   const [image, setImage] = useState(null);
@@ -44,9 +45,11 @@ function Add() {
           category: "Salad",
         });
         setImage(null);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Error adding food item:", error);
+      toast.error(response.data.message);
     }
   };
 
