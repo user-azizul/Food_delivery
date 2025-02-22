@@ -1,0 +1,115 @@
+/* .list{
+
+}
+.list-table-format{
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    align-items: center;
+    gap:10px;
+    padding:12px 15px;
+    border: 1px solid #cacaca;
+    font-size: 13px;
+    width: 100%;
+}
+.list-table-format.title{
+    background-color: #f9f9f9;
+
+}
+.list-table-format img{
+    width: 50px;
+} */
+
+  
+  .list-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+
+  .list-table-format{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    align-items: center;
+    gap:10px;
+    padding:12px 15px;
+    border: 1px solid #cacaca;
+    font-size: 13px;
+    width: 100%;
+}
+.list-table-format.title{
+    background-color: #f9f9f9;
+
+}
+  
+  .list-table-format img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .list-table-format b {
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  .list-table-format p {
+    margin: 0;
+  }
+  
+  .title {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    padding: 15px 10px;
+  }
+  
+  .list-table-format:last-child {
+    border-bottom: none;
+  }
+  
+  .list-table-format p:last-child {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .list-table-format p:last-child:hover {
+    color: darkred;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .list {
+      width: 95%;
+    }
+  
+    .list-table-format {
+      grid-template-columns: 80px 1fr 1fr 50px;
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .list-table-format b:nth-child(4),
+    .list-table-format p:nth-child(4) {
+      display: none; /* Hide price column */
+    }
+  
+    .list-table-format img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .list-table-format {
+      grid-template-columns: 60px 1fr 50px;
+    }
+  
+    .list-table-format b:nth-child(3),
+    .list-table-format p:nth-child(3) {
+      display: none; /* Hide category column */
+    }
+  }
+  
