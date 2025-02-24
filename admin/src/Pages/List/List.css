@@ -80,36 +80,20 @@
   }
   
   /* Responsive Design */
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     .list {
       width: 95%;
     }
   
     .list-table-format {
-      grid-template-columns: 80px 1fr 1fr 50px;
-      font-size: 14px;
-      padding: 8px;
+      grid-template-columns:1fr 3fr 1fr;
+      gap:15px
     }
   
-    .list-table-format b:nth-child(4),
-    .list-table-format p:nth-child(4) {
-      display: none; /* Hide price column */
-    }
-  
-    .list-table-format img {
-      width: 50px;
-      height: 50px;
+    .list-table-format,
+    .title{
+      display:none;
     }
   }
   
-  @media (max-width: 480px) {
-    .list-table-format {
-      grid-template-columns: 60px 1fr 50px;
-    }
-  
-    .list-table-format b:nth-child(3),
-    .list-table-format p:nth-child(3) {
-      display: none; /* Hide category column */
-    }
-  }
-  
+ 
