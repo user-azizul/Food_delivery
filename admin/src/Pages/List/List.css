@@ -78,6 +78,7 @@
   .list-table-format p:last-child:hover {
     color: darkred;
   }
+  .cursor{cursor: pointer;}
   
   /* Responsive Design */
   @media (max-width: 600px) {

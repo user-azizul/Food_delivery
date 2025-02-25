@@ -31,9 +31,13 @@ function List() {
   async function remove(_id) {
     setIsRemoving(_id);
     try {
-      await axios.post(`${URL}/api/food/remove/`, { _id });
+     const {data}= await axios.post(`${URL}/api/food/remove/`, { _id });
       setList((prev) => prev.filter((item) => item._id !== _id));
-      toast.success("Item removed successfully");
+      await fetchList();
+      if(data.success){
+        toast.success("Item removed successfully");
+      }
+     
     } catch (error) {
       console.error("Error removing item", error);
       toast.error("Failed to remove item");
@@ -64,7 +68,7 @@ function List() {
                 <p>{item.name}</p>
                 <p>{item.category}</p>
                 <p>${item.price}</p>
-                <p
+                <p className="cursor"
                   onClick={() => !isRemoving && remove(item._id)}
                   style={{
                     cursor: isRemoving ? "not-allowed" : "pointer",
