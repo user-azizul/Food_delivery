@@ -28,7 +28,7 @@ connectDB();
 
 // Routes
 app.use("/api/food", foodRouter);
-app.use("/api/user", userRouter);
+app.use("/auth", userRouter);
 
 app.use("/images", express.static("uploads"));
 
