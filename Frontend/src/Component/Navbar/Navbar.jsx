@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../../assets/frontend_assets/assets";
 
 import "./Navbar.css";
 import { Link, NavLink } from "react-router";
+import { StoreContext } from "../../Context/StoreContext";
 
 const Navbar = ({ setShowLogin }) => {
+  const { totalCartAmount, token, setToken } = useContext(StoreContext);
   const handleScroll = (id) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+  const logout = () => {
+    setToken("");
+    localStorage.removeItem("token");
   };
   return (
     <div className="navbar">
@@ -55,9 +61,28 @@ const Navbar = ({ setShowLogin }) => {
           <Link to="/cart">
             <img src={assets.basket_icon} alt="" />{" "}
           </Link>
-          <div className="dot"></div>
+          <div className={`${totalCartAmount() === 0 ? "" : "dot"}`}></div>
         </div>
-        <button onClick={() => setShowLogin(true)}>Sign in</button>
+        {!token ? (
+          <button onClick={() => setShowLogin(true)}>Sign in</button>
+        ) : (
+          <div className="navbar-profile">
+            <img src={assets.profile_icon} alt="" />
+            <ul className="nav-profile-dropdown">
+              <li>
+                {" "}
+                <img src={assets.bag_icon} alt="" />
+                Order
+              </li>
+              <hr />
+              <li onClick={() => logout()}>
+                {" "}
+                <img src={assets.logout_icon} alt="" />
+                Logout
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
