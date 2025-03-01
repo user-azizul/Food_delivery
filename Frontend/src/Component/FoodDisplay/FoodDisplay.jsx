@@ -4,13 +4,13 @@ import FoodItem from "../FoodItem/FoodItem";
 import "./FoodDisplay.css";
 
 const FoodDisplay = ({ category }) => {
-  const { food_list = [] } = useContext(StoreContext);
+  const { foodList = [] } = useContext(StoreContext);
 
   // Show all dishes if "All" is selected, otherwise filter by category
   const filteredFoodList =
     category === "All" || !category
-      ? food_list
-      : food_list.filter((food) => food.category === category);
+      ? foodList
+      : foodList.filter((food) => food.category === category);
 
   return (
     <div className="food-display" id="food-display">
@@ -19,7 +19,7 @@ const FoodDisplay = ({ category }) => {
         {filteredFoodList.length > 0 ? (
           filteredFoodList.map((food) => (
             <FoodItem
-              key={food._id} // Ensures unique key
+              key={food._id}
               id={food._id}
               name={food.name}
               description={food.description}

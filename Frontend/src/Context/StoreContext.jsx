@@ -1,38 +1,53 @@
-import React, { createContext, useEffect, useState } from "react";
-import { food_list } from "../assets/frontend_assets/assets";
+import React, { createContext, useEffect, useState, useMemo } from "react";
+import axios from "axios";
 
 const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
-  const [token, setToken] = useState("");
+  const [foodList, setFoodList] = useState([]);
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
 
-  // ✅ Load Token from LocalStorage on Initial Render
+  // Save Token to LocalStorage when it changes
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken) {
-      setToken(savedToken); // Set token in state
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+      console.warn("Token removed from LocalStorage");
     }
-  }, []);
+  }, [token]);
 
-  const addToCart = (id) => {
-    setCartItems((prev) => {
-      if (prev[id]) {
-        return { ...prev, [id]: prev[id] + 1 };
+  const addToCart = async (id) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1
+    }));
+    try {
+      if (!token) {
+        console.warn("Skipping API call: No token available");
+        return;
       }
-      return { ...prev, [id]: 1 };
-    });
+      const { data } = await axios.post(
+        backendUrl + "/cart/add",
+        { productId: id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error, "add to cart error");
+    }
   };
 
   const removeFromCart = (id) => {
     setCartItems((prev) => {
-      if (prev[id] > 1) {
-        return { ...prev, [id]: prev[id] - 1 };
+      const newCartItems = { ...prev };
+      if (newCartItems[id] > 1) {
+        newCartItems[id] -= 1;
       } else {
-        const newCartItems = { ...prev };
         delete newCartItems[id];
-        return newCartItems;
       }
+      return newCartItems;
     });
   };
 
@@ -40,32 +55,64 @@ const StoreContextProvider = ({ children }) => {
     let total = 0;
     for (let key in cartItems) {
       let quantity = cartItems[key];
-      const food = food_list.find((item) => item._id === key);
-      total += food.price * quantity;
+      const food = foodList.find((item) => item._id === key);
+      if (food) {
+        total += food.price * quantity;
+      }
     }
     return total;
   };
 
-  const totalCartItems = () => {
+  const totalCartItems = useMemo(() => {
     return Object.values(cartItems).reduce((a, b) => a + b, 0);
-  };
-
-  const backendUrl = "http://localhost:4000";
-
-  useEffect(() => {
-    console.log(cartItems);
   }, [cartItems]);
 
-  const contextValue = {
-    food_list,
-    cartItems,
-    addToCart,
-    removeFromCart,
-    totalCartAmount,
-    backendUrl,
-    token,
-    setToken
+  const backendUrl = "http://localhost:4000";
+  const getAllfood = async () => {
+    const result = await axios.get(backendUrl + "/api/food/list");
+
+    if (result.data.success) {
+      setFoodList(result.data.data);
+    }
   };
+  const getCartItems = async () => {
+    if (!token) {
+      console.warn("Skipping API call: No token available");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${backendUrl}/cart/get`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.data && response.data.cart) {
+        setCartItems(response.data.cart);
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCartItems();
+    getAllfood();
+  }, [token]); // Runs when token changes
+
+  const contextValue = useMemo(
+    () => ({
+      foodList,
+      cartItems,
+      addToCart,
+      removeFromCart,
+      totalCartAmount,
+      totalCartItems,
+      backendUrl,
+      token,
+      setToken
+    }),
+    [foodList, cartItems, totalCartAmount, totalCartItems, token]
+  );
 
   return (
     <StoreContext.Provider value={contextValue}>

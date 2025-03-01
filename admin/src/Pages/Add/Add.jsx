@@ -8,9 +8,10 @@ function Add() {
   const [image, setImage] = useState(null);
   const [data, setData] = useState({
     name: "",
-    description: "",
+    description:
+      "Food provides essential nutrients for overall health and well-being",
     price: "",
-    category: "Salad",
+    category: "Salad"
   });
 
   const onChangeHandler = (e) => {
@@ -33,16 +34,17 @@ function Add() {
         "http://localhost:4000/api/food/add",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data" }
         }
       );
 
       if (response.data.success) {
         setData({
           name: "",
-          description: "",
+          description:
+            "Food provides essential nutrients for overall health and well-being",
           price: "",
-          category: "Salad",
+          category: "Salad"
         });
         setImage(null);
         toast.success(response.data.message);
