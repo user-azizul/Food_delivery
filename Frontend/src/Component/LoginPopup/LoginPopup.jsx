@@ -5,7 +5,7 @@ import { StoreContext } from "../../Context/StoreContext";
 import axios from "axios";
 
 function LoginPopup({ setShowLogin }) {
-  const [currentState, setCurrentState] = React.useState("Sign Up");
+  const [isSignUp, setIsSignUp] = React.useState(false);
   const [data, setData] = React.useState({
     name: "",
     email: "",
@@ -24,7 +24,7 @@ function LoginPopup({ setShowLogin }) {
     e.preventDefault();
     try {
       let response;
-      if (currentState === "Sign Up") {
+      if (isSignUp) {
         // Sign-up request
         response = await axios.post(`${backendUrl}/auth/register`, data);
       } else {
@@ -52,7 +52,7 @@ function LoginPopup({ setShowLogin }) {
     <div className="login-popup">
       <form onSubmit={onLogin} className="login-popup-container">
         <div className="login-popup-tittle">
-          <h2>{currentState}</h2>
+          <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
           <img
             onClick={() => setShowLogin(false)}
             src={assets.cross_icon}
@@ -60,7 +60,7 @@ function LoginPopup({ setShowLogin }) {
           />
         </div>
         <div className="login-popup-inputs">
-          {currentState === "Sign Up" && (
+          {isSignUp && (
             <input
               name="name"
               value={data.name}
@@ -87,26 +87,24 @@ function LoginPopup({ setShowLogin }) {
             required
           />
         </div>
-        <button type="submit">
-          {currentState === "Sign Up" ? "Create Account" : "Log In"}
-        </button>
+        <button type="submit">{isSignUp ? "Create Account" : "Log In"}</button>
         <div className="login-popup-condition">
           <input type="checkbox" required />
           <p>
             I agree to the <span>Terms</span> and <span>Privacy Policy</span>
           </p>
         </div>
-        {currentState === "Sign Up" ? (
+        {isSignUp ? (
           <p>
             Already have an account?{" "}
-            <span className="link" onClick={() => setCurrentState("Login")}>
+            <span className="link" onClick={() => setIsSignUp(!isSignUp)}>
               Login here
             </span>
           </p>
         ) : (
           <p>
             Create a new account?{" "}
-            <span className="link" onClick={() => setCurrentState("Sign Up")}>
+            <span className="link" onClick={() => setIsSignUp(!isSignUp)}>
               Click here
             </span>
           </p>

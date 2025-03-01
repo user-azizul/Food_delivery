@@ -29,7 +29,7 @@ const StoreContextProvider = ({ children }) => {
         return;
       }
       const { data } = await axios.post(
-        backendUrl + "/cart/add",
+        `${backendUrl}/cart/add`,
         { productId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -39,16 +39,50 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => {
-      const newCartItems = { ...prev };
-      if (newCartItems[id] > 1) {
-        newCartItems[id] -= 1;
-      } else {
-        delete newCartItems[id];
+  const removeFromCart = async (id) => {
+    try {
+      setCartItems((prev) => {
+        const newCartItems = { ...prev };
+        if (newCartItems[id] > 1) {
+          newCartItems[id] -= 1;
+        } else {
+          delete newCartItems[id];
+        }
+        return newCartItems;
+      });
+      const { data } = await axios.post(
+        `${backendUrl}/cart/remove`,
+        { productId: id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        console.log("item removed from cart");
       }
-      return newCartItems;
-    });
+    } catch (error) {
+      console.log("item remove error from cart" + error);
+    }
+  };
+
+  const removeItemFromCart = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/cart/removeItem`,
+        { productId: id },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      if (data.success) {
+        console.log("item removed from cart");
+        setCartItems((prev) => {
+          const newCartItems = { ...prev };
+          delete newCartItems[id];
+          return newCartItems;
+        });
+      }
+    } catch (error) {
+      console.log("cart error from cart page " + error);
+    }
   };
 
   const totalCartAmount = () => {
@@ -68,13 +102,18 @@ const StoreContextProvider = ({ children }) => {
   }, [cartItems]);
 
   const backendUrl = "http://localhost:4000";
-  const getAllfood = async () => {
-    const result = await axios.get(backendUrl + "/api/food/list");
 
-    if (result.data.success) {
-      setFoodList(result.data.data);
+  const getAllfood = async () => {
+    try {
+      const result = await axios.get(`${backendUrl}/api/food/list`);
+      if (result.data.success) {
+        setFoodList(result.data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch food list:", error);
     }
   };
+
   const getCartItems = async () => {
     if (!token) {
       console.warn("Skipping API call: No token available");
@@ -109,7 +148,8 @@ const StoreContextProvider = ({ children }) => {
       totalCartItems,
       backendUrl,
       token,
-      setToken
+      setToken,
+      removeItemFromCart
     }),
     [foodList, cartItems, totalCartAmount, totalCartItems, token]
   );

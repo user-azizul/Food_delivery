@@ -2,11 +2,18 @@ import React, { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../Context/StoreContext";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function Cart() {
-  const { cartItems, foodList, removeFromCart, totalCartAmount, backendUrl } =
-    useContext(StoreContext);
+  const {
+    cartItems,
+    foodList,
+    removeItemFromCart,
+    totalCartAmount,
+    backendUrl
+  } = useContext(StoreContext);
   const navigate = useNavigate();
+
   return (
     <div className="cart">
       <div className="cart-items">
@@ -36,7 +43,7 @@ function Cart() {
                   <p
                     className="cross"
                     onClick={() => {
-                      removeFromCart(food._id);
+                      removeItemFromCart(food._id);
                     }}
                   >
                     X

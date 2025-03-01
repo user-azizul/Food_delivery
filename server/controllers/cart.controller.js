@@ -38,7 +38,7 @@ const addToCart = async (req, res) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
       { cartData: userCart },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!updatedUser) {
@@ -73,8 +73,6 @@ const removeFromCart = async (req, res) => {
       .status(400)
       .json({ success: false, message: "Product ID is required" });
   }
-  console.log("Received productId:", productId);
-  console.log("Received userId:", userId);
 
   try {
     // Find the user from the database
@@ -104,7 +102,73 @@ const removeFromCart = async (req, res) => {
     }
 
     // Update the user's cart in the database
-    const updatedUser = await user.save();
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { cartData: userCart },
+      {
+        new: true
+      }
+    );
+    if (!updatedUser) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to update the cart" });
+    }
+
+    // Return success response
+    return res.status(200).json({
+      success: true,
+      message: "Item removed from cart",
+      cart: updatedUser.cartData
+    });
+  } catch (error) {
+    console.error("Error from remove from cart:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error removing item from cart" });
+  }
+};
+//Remove whole item from cart
+const removeItemFromCart = async (req, res) => {
+  const { productId } = req.body;
+  const { userId } = req.user;
+
+  if (!productId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Product ID is required" });
+  }
+
+  try {
+    // Find the user from the database
+    let user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    let userCart = user.cartData || {};
+
+    // If the product is not in the cart, return error
+    if (!userCart[productId]) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Item not found in cart" });
+    }
+
+    // If the product quantity is greater than 1, reduce it
+    if (userCart[productId]) {
+      delete userCart[productId];
+    }
+
+    // Update the user's cart in the database
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { cartData: userCart },
+      { new: true }
+    );
     if (!updatedUser) {
       return res
         .status(500)
@@ -152,4 +216,4 @@ const getCartItem = async (req, res) => {
   }
 };
 
-export { addToCart, removeFromCart, getCartItem };
+export { addToCart, removeFromCart, getCartItem, removeItemFromCart };
