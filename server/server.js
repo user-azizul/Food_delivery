@@ -6,6 +6,7 @@ import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/food.route.js";
 import userRouter from "./routes/user.route.js";
 import { cartRouter } from "./routes/cart.route.js";
+import { orderRouter } from "./routes/order.route.js";
 
 // App Config
 dotenv.config();
@@ -30,6 +31,7 @@ connectDB();
 app.use("/api/food", foodRouter);
 app.use("/auth", userRouter);
 app.use("/cart", cartRouter);
+app.use("/order", orderRouter);
 
 app.use("/images", express.static("uploads"));
 

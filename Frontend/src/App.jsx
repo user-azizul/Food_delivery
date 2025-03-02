@@ -6,6 +6,7 @@ import Cart from "./Pages/Cart/Cart";
 import PlaceOrder from "./Pages/PlaceOrder/PlaceOrder";
 import Footer from "./Component/Footer/Footer";
 import LoginPopup from "./Component/LoginPopup/LoginPopup";
+import Verify from "./Pages/Verify/Verify";
 
 function App() {
   const [showLogin, setShowLogin] = React.useState(false);
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
+          <Route path="/verify" element={<Verify />} />
         </Routes>
       </div>
       <Footer />
