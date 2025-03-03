@@ -130,3 +130,17 @@ orderRouter.post("/verify", async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 });
+
+// all orders for admin
+orderRouter.get("/all-orders", async (req, res) => {
+  try {
+    const orders = await OrderModel.find({});
+    if (!orders) {
+      return res.json({ success: false, message: "No orders found" });
+    }
+    return res.json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+});

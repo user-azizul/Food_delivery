@@ -1,0 +1,11 @@
+.order-item {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
+  align-items: start;
+  gap: 30px;
+  font-size: 14px;
+  padding: 10px;
+  color: #454545;
+  border: 1px solid tomato;
+  margin: 30px 0px;
+}
