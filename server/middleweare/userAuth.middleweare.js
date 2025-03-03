@@ -1,23 +1,31 @@
 import jwt from "jsonwebtoken";
+import UserModel from "../models/user.model.js";
 
 export const userAuth = async (req, res, next) => {
-  const authToken = req.headers.authorization?.split(" ")[1];
-  if (!authToken)
-    return res.json({
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({
       success: false,
       message: "Not Authorized, Please login"
     });
-  console.log(authToken);
+  }
+
+  const authToken = authHeader.split(" ")[1];
+  console.log("authToken", authToken);
+
   try {
-    // Decode the token using the secret
-    const tokenDecode = jwt.verify(authToken, process.env.JWT_SECRET);
+    // Decode the token
+    const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
 
-    // Attach the decoded user info to req.user
-    req.user = tokenDecode;
-
+    // Attach user to request object
+    req.user = decoded;
     next();
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error in user authentication" });
+    console.error("JWT Error:", error);
+    return res.status(401).json({
+      success: false,
+      message: "Invalid Token, Please login again"
+    });
   }
 };

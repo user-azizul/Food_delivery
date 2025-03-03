@@ -96,6 +96,18 @@ orderRouter.post("/place", userAuth, async (req, res) => {
     res.send({ success: false, message: error.message });
   }
 });
+// user order for frontend
+
+orderRouter.post("/user-orders", userAuth, async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const orders = await OrderModel.find({ userId });
+    return res.json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+});
 
 // Verify order payment route
 orderRouter.post("/verify", async (req, res) => {
@@ -104,7 +116,10 @@ orderRouter.post("/verify", async (req, res) => {
   try {
     if (success === "true") {
       // Make sure the success variable is checked correctly
-      await OrderModel.findByIdAndUpdate(orderId, { payment: true });
+      await OrderModel.findByIdAndUpdate(orderId, {
+        payment: true,
+        status: "Food Processing"
+      });
       res.json({ success: true, message: "Payment successful" });
     } else {
       await OrderModel.findByIdAndDelete(orderId);

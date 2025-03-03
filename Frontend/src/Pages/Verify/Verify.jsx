@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./verify.css";
 import axios from "axios";
 
@@ -16,6 +16,7 @@ function Verify() {
   const [success, setSuccess] = useState(null);
   const [orderId, setOrderId] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const verifyOrder = useCallback(async () => {
     try {
@@ -23,6 +24,13 @@ function Verify() {
         orderId,
         success
       });
+      if (response.data.success) {
+        setError(null);
+        navigate("/my-orders");
+      } else {
+        navigate("/");
+        setError("Failed to verify the order. Please try again later.");
+      }
       console.log("Verification Response:", response.data);
     } catch (error) {
       console.error("Verification Error:", error);
@@ -35,7 +43,7 @@ function Verify() {
   useEffect(() => {
     const successParam = searchParams.get("success");
     const orderIdParam = searchParams.get("orderId");
-    setSuccess("true");
+    setSuccess(successParam === "true" ? "true" : "false");
     setOrderId(orderIdParam);
   }, [searchParams]);
 

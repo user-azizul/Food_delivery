@@ -191,7 +191,7 @@ const removeItemFromCart = async (req, res) => {
 
 // Get Cart Items
 const getCartItem = async (req, res) => {
-  const { userId } = req.user; // Get userId from authenticated user
+  const { userId } = req.user;
 
   try {
     // Find the user from the database
