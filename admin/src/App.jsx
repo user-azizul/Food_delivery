@@ -24,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/add" element={<Add />} />
             <Route path="/list" element={<List />} />
-            <Route path="/orders" element={<Order />} />
+            <Route path="/my-orders" element={<Order />} />
           </Routes>
         </div>
       </div>

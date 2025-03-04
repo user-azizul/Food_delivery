@@ -144,3 +144,18 @@ orderRouter.get("/all-orders", async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 });
+
+// update order status
+orderRouter.post("/update-status", async (req, res) => {
+  const { orderId, status } = req.body;
+  try {
+    await OrderModel.findByIdAndUpdate(orderId, { status });
+    return res.json({
+      success: true,
+      message: "Order status updated successfully"
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+});

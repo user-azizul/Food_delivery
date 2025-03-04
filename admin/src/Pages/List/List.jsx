@@ -31,13 +31,12 @@ function List() {
   async function remove(_id) {
     setIsRemoving(_id);
     try {
-     const {data}= await axios.post(`${URL}/api/food/remove/`, { _id });
+      const { data } = await axios.post(`${URL}/api/food/remove/`, { _id });
       setList((prev) => prev.filter((item) => item._id !== _id));
       await fetchList();
-      if(data.success){
+      if (data.success) {
         toast.success("Item removed successfully");
       }
-     
     } catch (error) {
       console.error("Error removing item", error);
       toast.error("Failed to remove item");
@@ -57,23 +56,24 @@ function List() {
           <div className="list-table-format title">
             <b>Image</b>
             <b>Name</b>
-            <b>Category</b>
+            <b className="category">Category</b>
             <b>Price</b>
-            <b>Action</b>
+            <b className="action">Action</b>
           </div>
           {list.length > 0 ? (
             list.map((item) => (
               <div className="list-table-format" key={item._id}>
                 <img src={`${URL}/images/${item.image}`} alt={item.name} />
                 <p>{item.name}</p>
-                <p>{item.category}</p>
+                <p className="category">{item.category}</p>
                 <p>${item.price}</p>
-                <p className="cursor"
+                <p
+                  className="cursor"
                   onClick={() => !isRemoving && remove(item._id)}
                   style={{
                     cursor: isRemoving ? "not-allowed" : "pointer",
                     color: "red",
-                    opacity: isRemoving === item._id ? 0.5 : 1,
+                    opacity: isRemoving === item._id ? 0.5 : 1
                   }}
                 >
                   {isRemoving === item._id ? "Removing..." : "X"}
